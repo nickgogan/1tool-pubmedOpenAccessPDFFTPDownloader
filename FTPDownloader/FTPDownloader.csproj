@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentFTP" Version="37.0.0" />
+    <PackageReference Include="Humanizer" Version="2.14.1" />
+  </ItemGroup>
+
 </Project>
