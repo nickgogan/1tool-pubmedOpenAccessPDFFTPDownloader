@@ -6,11 +6,13 @@ namespace FTPDownloader
 {
     internal class App
     {
+        private const long ONE_HUNDRED_KILOBYTES_IN_BYTES = 100;
         private const long TEN_MEGABYTES_IN_BYTES = 10_000_000;
-        private const long FIFTEEN_MEGABYTES_IN_BYTES = 15_000_000; //Max MDB doc size is 16MB. Leave 1MB for fields other than fulltext.
+        private const long FIFTEEN_MEGABYTES_IN_BYTES = 5_000_000; //Max MDB doc size is 5MB. Leave 1MB for fields other than fulltext.
         private const long MAX_ALLOWED_SPACE_IN_BYTES = 100_000_000_000;
-        private const long MAX_NUMBER_OF_FILES = 100;//1_000;
+        private const long MAX_NUMBER_OF_FILES = 1000;//1_000;
         private const string PDF_DOWNLOAD_DIRECTORY = @"C:\0.Personal\Tech\Projects\CSharp\tool-pubmedOpenAccessPDFFTPDownloader\PDFs";
+        private const string FTP_CONTENT_PATHS_FILE = @"C:\0.Personal\Tech\Projects\CSharp\tool-pubmedOpenAccessPDFFTPDownloader";
 
         private static void Main(string[] args)
         {
@@ -29,7 +31,7 @@ namespace FTPDownloader
             //ContentDirectoryGenerator generator = new();
             //generator.GetContentDirectories(client, "/pub/pmc/oa_pdf/"); //Generates ftpContentPaths.txt file in /bin/Debug/net6.0/.
 
-            List<string> contentDirectories = File.ReadLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ftpContentPaths.txt")).ToList();
+            List<string> contentDirectories = File.ReadLines(Path.Combine(FTP_CONTENT_PATHS_FILE, "ftpContentPaths.txt")).ToList();
             Dictionary<string, long> filesToDownload = new();
             long availableDiskSpace = MAX_ALLOWED_SPACE_IN_BYTES;
             Stopwatch stopwatch = new Stopwatch();
@@ -47,7 +49,7 @@ namespace FTPDownloader
                         break;
                     }
 
-                    if (FileIsNotDownloadable(file, TEN_MEGABYTES_IN_BYTES, FIFTEEN_MEGABYTES_IN_BYTES)) //Only download files between 10MB and 15MB
+                    if (FileIsNotDownloadable(file, ONE_HUNDRED_KILOBYTES_IN_BYTES, TEN_MEGABYTES_IN_BYTES)) //Only download files between 10MB and 15MB
                     {
                         //Console.WriteLine("File [" + file.FullName + "] does not meet requirements for download."); //Test
                         continue;
